@@ -92,6 +92,13 @@ const AdminInbox = () => {
     }).format(date);
   };
 
+  const handleReply = (email) => {
+    const subject = encodeURIComponent(email.customSubject || email.subject || "");
+    const body = encodeURIComponent(`Hi ${email.name},\n\n`);
+    const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${email.email}&su=${subject}&body=${body}`;
+    window.open(mailtoLink, "_blank");
+  };
+
   if (loading) {
     return (
       <>
@@ -174,7 +181,7 @@ const AdminInbox = () => {
               </span>
             </div>
 
-            {filteredEmails.map((email, idx) => {
+            {filteredEmails.map((email) => {
               const isExpanded = expandedId === email._id;
               const isSelected = selectedEmails.has(email._id);
 
@@ -251,11 +258,11 @@ const AdminInbox = () => {
                       </p>
 
                       <div className="mt-4 flex gap-3">
-                        <button className="px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 text-white transition-all">
+                        <button
+                          onClick={() => handleReply(email)}
+                          className="px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 text-white transition-all"
+                        >
                           Reply
-                        </button>
-                        <button className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white transition-all">
-                          Mark as Read
                         </button>
                       </div>
                     </div>
